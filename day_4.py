@@ -1,15 +1,7 @@
 import data_getter
 import os
 
-if (os.path.exists("data_day_4.txt")):
-    with open("data_day_4.txt", "r") as f:
-        data = f.read()
-else:
-    data = data_getter.get_data(4)
-    with open("data_day_4.txt", "r") as f:
-        data = f.read()
-
-data = data.splitlines()
+data = data_getter.get_data(4).splitlines()
 
 new_data = []
 for item in data:

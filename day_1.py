@@ -1,15 +1,6 @@
 import data_getter
-import os
 
-if (os.path.exists("data_day_1.txt")):
-    with open("data_day_1.txt", "r") as f:
-        data = f.read()
-else:
-    data = data_getter.get_data(1)
-    with open("data_day_1.txt", "r") as f:
-        data = f.read()
-
-data = data.splitlines()
+data = data_getter.get_data(1).splitlines()
 
 elves = []
 counter = 0

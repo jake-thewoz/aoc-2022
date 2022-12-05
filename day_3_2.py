@@ -1,15 +1,6 @@
 import data_getter
-import os
 
-if (os.path.exists("data_day_3.txt")):
-    with open("data_day_3.txt", "r") as f:
-        data = f.read()
-else:
-    data = data_getter.get_data(3)
-    with open("data_day_3.txt", "r") as f:
-        data = f.read()
-
-data = data.splitlines()
+data = data_getter.get_data(3).splitlines()
 
 print(data)
 
