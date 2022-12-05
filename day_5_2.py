@@ -25,11 +25,9 @@ for struct in instructions:
     dest = int(struct[5]) - 1
     amount = int(struct[1])
 
-    # print(struct)
-    # print(f'Before: {stacks}')
-    for i in range(amount):
-        stacks[dest].append(stacks[source].pop())
-        # print(f'After {i} times: {stacks}')
+    temp = stacks[source][-amount:]
+    del stacks[source][-amount:]
+    stacks[dest].extend(temp)
 
 print('Answer time!')
 
