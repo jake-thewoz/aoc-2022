@@ -3,8 +3,10 @@ import json
 import os
 
 def get_data(day):
-    if (os.path.exists(f"data_day_{day}.txt")):
-        with open(f"data_day_{day}.txt", "r") as f:
+    if not (os.path.exists("data/")):
+        os.mkdir("data")
+    if (os.path.exists(f"data/day_{day}.txt")):
+        with open(f"data/day_{day}.txt", "r") as f:
             data = f.read()
         return data
     else:
@@ -26,7 +28,7 @@ def get_data(day):
         for line in page_lines:
             data.append(line)
 
-        with open("data_day_" + str(day) + ".txt", "w") as f:
+        with open("data/day_" + str(day) + ".txt", "w") as f:
             for line in data:
                 f.write(line + "\n")
         return data
