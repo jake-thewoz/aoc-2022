@@ -6,4 +6,4 @@ defaults.json
 /__pycache__
 
 # Data files
-*.txt
+data/
