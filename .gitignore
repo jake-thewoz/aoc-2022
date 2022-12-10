@@ -4,3 +4,6 @@ defaults.json
 
 # Temp files
 /__pycache__
+
+# Data files
+*.txt
