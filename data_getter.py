@@ -5,12 +5,12 @@ import os
 def get_data(day):
     if not (os.path.exists("data/")):
         os.mkdir("data")
+         
     if (os.path.exists(f"data/day_{day}.txt")):
         with open(f"data/day_{day}.txt", "r") as f:
             data = f.read()
         return data
     else:
-
         with open('defaults.json','r') as f:
             defaults = json.load(f)
 
@@ -28,7 +28,12 @@ def get_data(day):
         for line in page_lines:
             data.append(line)
 
+        # First we save as txt
         with open("data/day_" + str(day) + ".txt", "w") as f:
             for line in data:
                 f.write(line + "\n")
+        # Then we re-load the data from the text
+        # This just helps keep performance consistent
+        with open(f"data/day_{day}.txt", "r") as f:
+            data = f.read()
         return data
