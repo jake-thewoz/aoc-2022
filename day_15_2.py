@@ -22,6 +22,9 @@ ROW = 4000001
 # We'll just apply it row-by-row, until we find a space in our desired range
 #   that isn't impossible
 
+# Turns out the solution for part one is far too slow for the data set.
+# I've turned all the loops into vectorized functions
+
 def find_impossible(sensor, spread):
     combine_positive = lambda k: sensor[0] + k
     combine_negative = lambda k: sensor[0] - k
@@ -30,33 +33,45 @@ def find_impossible(sensor, spread):
     response.add(sensor[0])
     return response
 
-
 def find_spreads(sensor, row):
     return ((sensor[1] + sensor[2]) - row) if sensor[1] < row else (row - (sensor[1] - sensor[2]))
 
+def create_sensor_list(row):
+    return list(filter(lambda sensor: \
+    (sensor[1] <= row and sensor[1] + sensor[2] >= row) \
+    or (sensor[1] >= row and sensor[1] - sensor[2] <= row),
+    sensors))
 
-for i in range(ROW):
-    print(f"---Row {i}---")
+def generate_rows(sensor_list, row):
+    return [row] * len(list(sensor_list))
 
-    sensor_list = list(filter(lambda sensor: \
-        (sensor[1] <= i and sensor[1] + sensor[2] >= i) \
-        or (sensor[1] >= i and sensor[1] - sensor[2] <= i),
-        sensors))
-    
-    rows = [i] * len(list(sensor_list))
-    spreads = list(map(find_spreads, sensor_list, rows))
-    impossible.update(*map(find_impossible, sensor_list, spreads))
+def generate_spreads(sensor_list, rows):
+    return list(map(find_spreads, sensor_list, rows))
 
-    # print(list(sensor_list))
-    # print(list(spreads))
-    # print((impossible))
+def generate_impossibles(sensor_list, spreads):
+    imp = set()
+    imp.update(*map(find_impossible, sensor_list, spreads))
+    # Doing this next AND step to try to save on memory
+    imp &= set(range(ROW))
+    return imp
 
-    if len(set(range(ROW)) - impossible):
-        diff = list(set(range(ROW)) - set(impossible))[0]
-        answer = [diff, i]
-        print(f"Got the answer! It's {answer}")
-        break
-    else:
-        impossible.clear()
+rows = range(ROW)
 
-print(f"The tuning frequency of the distress beacon is {(answer[0] * 4000000) + answer[1]}")
+r_sensor_lists = list(map(create_sensor_list, rows))
+# print(r_sensor_lists)
+r_rows = list(map(generate_rows, r_sensor_lists, rows))
+# print(r_rows)
+r_spreads = list(map(generate_spreads, r_sensor_lists, r_rows))
+# print(r_spreads)
+r_impossibles = list(map(generate_impossibles, r_sensor_lists, r_spreads))
+# print(r_impossibles)
+
+# Solution time!
+answer = list(filter(lambda imp: len(set(range(ROW)) - imp), r_impossibles))
+# print(answer)
+
+y_answer = r_impossibles.index(answer[0])
+x_answer = list(set(range(ROW)) - set(answer[0]))[0]
+
+print(f"Got the answer! It's point {[x_answer, y_answer]}")
+print(f"The tuning frequency of the distress beacon is {(x_answer * 4000000) + y_answer}")
